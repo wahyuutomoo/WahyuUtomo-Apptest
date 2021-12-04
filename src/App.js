@@ -1,15 +1,24 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import Router from './router';
 import store from './redux/store';
+import { Loading } from './components';
 
 
 const MainApp = () => {
+  const { loading_screen } = useSelector((state) => state.FeatureReducer);
+
+
+
   return (
-    <NavigationContainer>
-      <Router />
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        <Router />
+      </NavigationContainer>
+
+      {loading_screen && <Loading type={"loading_screen"} />}
+    </>
   )
 }
 

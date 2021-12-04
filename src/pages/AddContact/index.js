@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Image, ToastAndroid } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { SetListContact, LoadingScreen } from '../../redux/action'
 import { DummyProfilePic } from '../../assets';
 import { Input, Header, ButtonCustom } from '../../components';
 import { useForm, getImageFromLibrary } from '../../utils';
@@ -7,23 +9,25 @@ import { ApiContact } from '../../network';
 
 
 const AddContact = ({ navigation }) => {
+    const dispatch = useDispatch();
+    const { list_data } = useSelector((state) => state.ContactReducer);
     const [addContact, setAddContact] = useForm({});
-    const [loading, setLoading] = useState(false)
 
-
-    async function GetContact(firstName, lastName, age, photo) {
-        setLoading(true)
+    async function PostContact(firstName, lastName, age, photo) {
+        dispatch(LoadingScreen(true))
         await ApiContact.PostContact(firstName, lastName, age, photo.uri)
             .then((res) => {
                 const { data } = res
                 console.log("dfgdfgdg", res)
+                dispatch(SetListContact([...list_data, addContact]))
+
                 navigation.goBack()
             })
             .catch((err) => {
                 console.log("errrr", err)
             })
             .finally(() => {
-                setLoading(false)
+                dispatch(LoadingScreen(false))
             })
     }
 
@@ -37,7 +41,7 @@ const AddContact = ({ navigation }) => {
 
     const saveContact = () => {
         if (addContact.firstName && addContact.lastName && addContact.age) {
-            GetContact(addContact.firstName, addContact.lastName, addContact.age, addContact?.pic ? addContact.pic : DummyProfilePic)
+            PostContact(addContact.firstName, addContact.lastName, addContact.age, addContact?.pic ? addContact.pic : DummyProfilePic)
         } else {
             ToastAndroid.show("Lengkapi form terlebih dahulu.", ToastAndroid.SHORT)
         }
