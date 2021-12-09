@@ -1,5 +1,5 @@
 const colorsGroup = {
-    primary: '#009DAE',
+    primary: '#EC255A',
     white: '#FFFFFF',
     black: '#000000',
 }

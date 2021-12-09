@@ -5,7 +5,7 @@ import { SetListContact } from '../../redux/action'
 import { DummyProfilePic, IcPlusRound } from '../../assets'
 import { Gap, Header, Loading, ItemRnModalize } from '../../components';
 import { ApiContact } from '../../network';
-import { colors, cstyles, fonts } from '../../utils'; 
+import { colors, cstyles, fonts } from '../../utils';
 
 
 const ListContact = ({ navigation }) => {
@@ -32,14 +32,19 @@ const ListContact = ({ navigation }) => {
             })
     }
 
+    const openDetailContact = (item) => {
+        navigation.navigate("DetailContact", { item })
+        console.log(item)
+    }
+
     useEffect(() => {
-        GetContact() 
+        GetContact()
     }, [])
 
 
     const renderItem = ({ item, index }) => {
         return (
-            <TouchableOpacity key={index} onPress={() => onActiveRnModalize()} style={{ ...cstyles.shadow(1), padding: 16, borderRadius: 10, marginVertical: 8 }}>
+            <TouchableOpacity key={index} onPress={() => openDetailContact(item)} style={{ ...cstyles.shadow(1), padding: 16, borderRadius: 10, marginVertical: 8 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
                         source={{ uri: item.photo }}
